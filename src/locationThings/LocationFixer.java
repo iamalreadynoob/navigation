@@ -13,17 +13,18 @@ public class LocationFixer
         this.yPos = yPos;
 
         BuildingDetector buildingDetector = new BuildingDetector(builder, xPos, yPos);
+        RoadDetector roadDetector;
         buildingDetector.detect();
 
-        if (buildingDetector.isHere())
-        {
+        if (buildingDetector.isHere()) roadDetector = new RoadDetector(roader, buildingDetector.getFixedX(), buildingDetector.getFixedY());
+        else roadDetector = new RoadDetector(roader, xPos, yPos);
 
-        }
-        else
-        {
-
-        }
+        fixedX = roadDetector.getFixedX();
+        fixedY = roadDetector.getFixedY();
 
     }
+
+    public Integer getFixedX() {return fixedX;}
+    public Integer getFixedY() {return fixedY;}
 
 }

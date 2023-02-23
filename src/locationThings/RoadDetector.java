@@ -9,7 +9,7 @@ public class RoadDetector implements IDetection
     private Integer fixedX = null;
     private Integer fixedY = null;
     private boolean isHere = false;
-    private boolean isCrossed = false;
+    private Lists cornerType = null;
     private String address = null;
 
     public RoadDetector(RoadResearcher roader, int requestedX, int requestedY)
@@ -35,16 +35,53 @@ public class RoadDetector implements IDetection
 
                 if (isVertical(i))
                 {
-                    //fixed x fixed y
+                    fixedX = roader.getData(Lists.XINITIALIZE).get(i);
+                    fixedY = requestedY;
                 }
                 else
                 {
-
+                    fixedX = requestedX;
+                    fixedY = roader.getData(Lists.YINITIALIZE).get(i);
                 }
 
             }
 
-            //blind point detection
+            if (!isHere)
+            {
+                int diagonal[] = crossed(i, isVertical(i));
+
+                if (diagonal[0] != Integer.MAX_VALUE)
+                {
+                    if (cornerType == Lists.XINITIALIZE)
+                    {
+                        if ((requestedX >= diagonal[0] && requestedX < roader.getData(Lists.XINITIALIZE).get(i))
+                        || (requestedX <= diagonal[0] && requestedX > roader.getData(Lists.XINITIALIZE).get(i)))
+                        {
+                            if ((requestedY >= diagonal[1] && requestedY < roader.getData(Lists.YINITIALIZE).get(i))
+                            || (requestedY <= diagonal[1] && requestedY > roader.getData(Lists.YINITIALIZE).get(i)))
+                            {
+                                fixedX = roader.getData(Lists.XINITIALIZE).get(i);
+                                fixedY = roader.getData(Lists.YINITIALIZE).get(i);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if ((requestedX >= diagonal[0] && requestedX < roader.getData(Lists.XFINAL).get(i))
+                                || (requestedX <= diagonal[0] && requestedX > roader.getData(Lists.XFINAL).get(i)))
+                        {
+                            if ((requestedY >= diagonal[1] && requestedY < roader.getData(Lists.YFINAL).get(i))
+                                    || (requestedY <= diagonal[1] && requestedY > roader.getData(Lists.YFINAL).get(i)))
+                            {
+                                fixedX = roader.getData(Lists.XFINAL).get(i);
+                                fixedY = roader.getData(Lists.YFINAL).get(i);
+                            }
+                        }
+                    }
+
+                    isHere = true;
+                }
+            }
 
             if (isHere == true) break;
         }
@@ -105,6 +142,8 @@ public class RoadDetector implements IDetection
                     {
                         diagonal[1] = roader.getData(Lists.YINITIALIZE).get(passId) - roader.getData(Lists.R).get(i);
                     }
+
+                    cornerType = Lists.XINITIALIZE;
                 }
 
                 else if (roader.getData(Lists.XINITIALIZE).get(passId) == roader.getData(Lists.XFINAL).get(i)
@@ -130,6 +169,8 @@ public class RoadDetector implements IDetection
                     {
                         diagonal[1] = roader.getData(Lists.YINITIALIZE).get(passId) - roader.getData(Lists.R).get(i);
                     }
+
+                    cornerType = Lists.XINITIALIZE;
                 }
 
                 else if (roader.getData(Lists.XFINAL).get(passId) == roader.getData(Lists.XINITIALIZE).get(i)
@@ -155,6 +196,8 @@ public class RoadDetector implements IDetection
                     {
                         diagonal[1] = roader.getData(Lists.YFINAL).get(passId) - roader.getData(Lists.R).get(i);
                     }
+
+                    cornerType = Lists.XFINAL;
                 }
 
                 else if (roader.getData(Lists.XFINAL).get(passId) == roader.getData(Lists.XFINAL).get(i)
@@ -180,6 +223,8 @@ public class RoadDetector implements IDetection
                     {
                         diagonal[1] = roader.getData(Lists.YFINAL).get(passId) - roader.getData(Lists.R).get(i);
                     }
+
+                    cornerType = Lists.XFINAL;
                 }
             }
         }
