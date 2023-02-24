@@ -71,6 +71,8 @@ public class BuildingResearcher implements IGettingData
             case CORNER3Y: returnIt = corner_3y; break;
             case CORNER4X: returnIt = corner_4x; break;
             case CORNER4Y: returnIt = corner_4y; break;
+            case ENTRANCEX: returnIt = entrance_x; break;
+            case ENTRANCEY: returnIt = entrance_y; break;
         }
 
         return returnIt;

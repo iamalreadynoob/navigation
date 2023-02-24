@@ -38,7 +38,10 @@ public class Main
         destY = new Scanner(System.in).nextInt();
 
         LocationFixer initializePoint = new LocationFixer(posX, posY, buildingResearcher, roadResearcher);
+        LocationFixer finalPoint = new LocationFixer(destX, destY, buildingResearcher, roadResearcher);
 
+        System.out.println(initializePoint.getFixedX() + "," + initializePoint.getFixedY());
+        System.out.println(finalPoint.getFixedX() + "," + finalPoint.getFixedY());
     }
 
 }
